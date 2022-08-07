@@ -138,6 +138,9 @@ func (w *Worker[T]) handleOutChannels(ctx context.Context, cases []reflect.Selec
 			toolName := msg.ToolName
 
 			for _, t := range w.listeners[toolName] {
+				if t.Name() == toolName {
+					continue
+				}
 				w.Add(1)
 				t.InChan() <- msg
 			}
