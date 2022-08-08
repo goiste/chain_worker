@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"testing"
 
-	"chain_worker/example/tools"
-	"chain_worker/src/chain_worker"
+	"github.com/goiste/chain_worker/example/tools"
+	"github.com/goiste/chain_worker/src/chain_worker"
 
 	"github.com/stretchr/testify/require"
 )

@@ -1,4 +1,4 @@
-module chain_worker
+module github.com/goiste/chain_worker
 
 go 1.18
 

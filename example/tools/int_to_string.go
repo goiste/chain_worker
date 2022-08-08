@@ -3,7 +3,7 @@ package tools
 import (
 	"fmt"
 
-	"chain_worker/src/chain_worker"
+	"github.com/goiste/chain_worker/src/chain_worker"
 )
 
 type IntToString struct {

@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"chain_worker/src/chain_worker"
+	"github.com/goiste/chain_worker/src/chain_worker"
 )
 
 type StringSliceSplit struct {
