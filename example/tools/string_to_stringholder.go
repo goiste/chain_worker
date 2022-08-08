@@ -18,7 +18,7 @@ func NewStringToStringHolder() *StringToStringHolder {
 	return s
 }
 
-func (sti *StringToStringHolder) Do(data string) (StringHolder, error) {
+func (*StringToStringHolder) Do(data string) (StringHolder, error) {
 	return StringHolder{Str: data}, nil
 }
 

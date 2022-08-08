@@ -12,6 +12,11 @@ const (
 	InputName = "input"
 )
 
+// ChainTool is an interface which implementation must be included in chained tool
+//
+// Implemented by BaseTool and BaseGeneratorTool
+//
+// see usage example: https://github.com/goiste/chain_worker/tree/main/example
 type ChainTool interface {
 	Run(ctx context.Context)
 	Name() string
@@ -21,6 +26,7 @@ type ChainTool interface {
 	ErrChan() chan error
 }
 
+// Worker handles chained tools
 type Worker[T any] struct {
 	*sync.WaitGroup
 
@@ -34,6 +40,7 @@ type Worker[T any] struct {
 	outNames map[string]func() interface{}
 }
 
+// New returns a new Worker with initial input data
 func New[T any](inputData []T) *Worker[T] {
 	wrk := &Worker[T]{
 		WaitGroup: new(sync.WaitGroup),
@@ -61,6 +68,23 @@ func New[T any](inputData []T) *Worker[T] {
 	return wrk
 }
 
+// Subscribe adds new tools to handle toolName output
+func (w *Worker[T]) Subscribe(toolName string, tools ...ChainTool) {
+	w.listeners[toolName] = append(w.listeners[toolName], tools...)
+	for _, t := range tools {
+		w.tools[t.Name()] = t
+	}
+}
+
+// SetOutput sets Worker to send some tools output to Worker output
+//
+// outNames uses key as tool name and value as function to produce a pointer to object of type corresponding to output type
+// (for using in Message Decode() method)
+func (w *Worker[T]) SetOutput(outNames map[string]func() interface{}) {
+	w.outNames = outNames
+}
+
+// Run starts the Worker
 func (w *Worker[T]) Run(ctx context.Context) (results []interface{}, errs []error) {
 	wCtx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -169,17 +193,6 @@ func (w *Worker[T]) handleErrorChannels(ctx context.Context, cases []reflect.Sel
 			errChan <- err
 		}
 	}
-}
-
-func (w *Worker[T]) Subscribe(toolName string, tools ...ChainTool) {
-	w.listeners[toolName] = append(w.listeners[toolName], tools...)
-	for _, t := range tools {
-		w.tools[t.Name()] = t
-	}
-}
-
-func (w *Worker[T]) SetOutput(outNames map[string]func() interface{}) {
-	w.outNames = outNames
 }
 
 func getCases[T any](channels []chan T) []reflect.SelectCase {

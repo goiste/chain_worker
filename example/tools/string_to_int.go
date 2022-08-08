@@ -16,7 +16,7 @@ func NewStringToInt() *StringToInt {
 	return s
 }
 
-func (sti *StringToInt) Do(data string) (int, error) {
+func (*StringToInt) Do(data string) (int, error) {
 	return strconv.Atoi(data)
 }
 

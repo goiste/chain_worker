@@ -16,7 +16,7 @@ func NewIntToString() *IntToString {
 	return i
 }
 
-func (its *IntToString) Do(data int) (string, error) {
+func (*IntToString) Do(data int) (string, error) {
 	return fmt.Sprintf("%d", data), nil
 }
 

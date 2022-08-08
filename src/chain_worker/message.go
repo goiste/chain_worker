@@ -7,12 +7,14 @@ import (
 	"fmt"
 )
 
+// Message stores the handling data
 type Message struct {
 	ToolName string
 	Done     bool
 	data     string
 }
 
+// Encode encodes obj to Message data field
 func (m *Message) Encode(obj interface{}) error {
 	b := bytes.Buffer{}
 	e := gob.NewEncoder(&b)
@@ -27,6 +29,9 @@ func (m *Message) Encode(obj interface{}) error {
 	return nil
 }
 
+// Decode decodes Message data field to obj
+//
+// obj must be a pointer to the corresponding structure
 func (m *Message) Decode(obj interface{}) error {
 	by, err := base64.StdEncoding.DecodeString(m.data)
 	if err != nil {

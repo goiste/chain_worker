@@ -5,16 +5,20 @@ import (
 	"fmt"
 )
 
+// generator is an interface that must be implemented in the BaseGeneratorTool implementations to do useful work
 type generator[I, O any] interface {
 	Generate(data []I) func() (O, bool)
 	Name() string
 }
 
+// BaseGeneratorTool is an implementation of ChainTool with the option to process a slice from the input channel
+// by one element and then send each processed element to the output channel
 type BaseGeneratorTool[I, O any] struct {
 	*BaseTool[I, O]
 	tool generator[I, O]
 }
 
+// NewBaseGeneratorTool creates a new BaseGeneratorTool
 func NewBaseGeneratorTool[I, O any](tool generator[I, O]) *BaseGeneratorTool[I, O] {
 	return &BaseGeneratorTool[I, O]{
 		BaseTool: NewBaseTool[I, O](nil),
@@ -22,6 +26,7 @@ func NewBaseGeneratorTool[I, O any](tool generator[I, O]) *BaseGeneratorTool[I, 
 	}
 }
 
+// Run starts handling
 func (t *BaseGeneratorTool[I, O]) Run(ctx context.Context) {
 outer:
 	for {
@@ -60,6 +65,7 @@ outer:
 	}
 }
 
+// converts data from Message to slice of required type
 func (t *BaseGeneratorTool[I, O]) getDataFromMessage(message Message) ([]I, error) {
 	var obj []I
 	err := message.Decode(&obj)
