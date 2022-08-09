@@ -1,6 +1,8 @@
 ## Chain Worker
 
-Simple tool chain with go
+A simple tool chain with Go.
+
+Requires Go version 1.18+ (uses generics)
 
 ![alt text](tool_chain.png)
 

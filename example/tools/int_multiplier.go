@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"github.com/goiste/chain_worker/src/chain_worker"
+	"github.com/goiste/chain_worker"
 )
 
 type IntMultiplier struct {
